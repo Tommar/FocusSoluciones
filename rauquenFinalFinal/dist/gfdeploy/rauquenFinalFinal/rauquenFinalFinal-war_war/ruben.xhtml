@@ -1,0 +1,428 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+    <h:head>
+        <title>Gasco Rauquen</title>
+    </h:head>
+    <h:body>
+       
+
+        <h:form>  
+            <p:growl id="messages"/>
+            <p:menubar>
+                <p:submenu label="Cliente" icon="ui-icon-person">
+
+                    <p:menuitem value="Edicion" url="#" />
+                    <p:separator />
+                    <p:menuitem value="Ver" url="#" />
+                </p:submenu>
+
+                <p:submenu label="Cilindros" icon="ui-icon-pencil">
+                    <p:menuitem value="Edicion" url="#" icon="ui-icon-arrowreturnthick-1-w" />
+                    <p:separator />
+                    <p:menuitem value="Ver" url="#" icon="ui-icon-arrowreturnthick-1-e" />
+                </p:submenu>
+
+                <p:submenu label="Ventas" icon="ui-icon-cart">
+                    <p:menuitem value="Nuevo Venta" url="#" />
+                    <p:separator />
+                    <p:menuitem value="Ver" url="#" icon="ui-icon-arrowreturnthick-1-e" />
+                </p:submenu>
+
+                <p:submenu label="Calculos" icon="ui-icon-gear">
+                    <p:menuitem value="Gastos" url="#" />
+                    <p:separator />
+                    <p:menuitem value="Comicions" url="#"  />
+                    <p:separator />
+                    <p:menuitem value="Ganas" url="#"  />
+                </p:submenu>
+                <f:facet name="options">
+                    <p:inputText style="margin-right:10px" placeholder="Buscar"/>
+                    <p:commandButton type="button" value="Logout" icon="ui-icon-extlink" />
+                </f:facet>
+            </p:menubar>
+        </h:form>
+
+
+        
+            <h:form >
+                <p:panelGrid columns="1" >
+                    
+                     <p:commandButton id="LMenuO" value="Logear Pedido" type="button" onclick="PF('dlgPedido').show();" />                
+                <p:commandButton id="LmenuC" value="Compra" type="button" onclick="PF('dlgCompra').show();"/>
+                     <p:commandButton id="LmenuR" value="Rendir" type="button" onclick="PF('dlgRendir').show();" />
+                     <p:commandButton id="LmenuS" value="Stock" type="button" onclick="PF('dlgStock').show();"/>
+                 <p:commandButton id="LmenuG" value="Gastos" type="button" onclick="PF('dlgGasto').show();"/>
+                 <p:commandButton id="LmenuCV" value="Cargar" type="button" onclick="PF('dlgCV').show();"/>
+                
+                </p:panelGrid>
+                    <p:dialog header="Logear Pedido" modal="true" draggable="false" resizable="false" widgetVar="dlgPedido" minHeight="40">
+                        <h:form>
+                    <p:growl id="msgLMP" showDetail="true" />
+                   
+                    
+                        <h:panelGrid columns="2" cellpadding="5">
+                            <p:outputLabel for="pedidoCilindros" value="Pesa" />
+                            <p:selectOneMenu id="pedidoCilindros" value="#{cilindroBean.cilindro}">
+                                 
+            <f:selectItem itemLabel="Cilindro" itemValue="" />
+            <f:selectItems value="#{cilindroBean.cilindros}"  />
+        </p:selectOneMenu>
+                            
+                            <p:outputLabel value="Chofer" for="Chofer" />
+                            <p:selectOneMenu id="Chofer" >
+                                <f:selectItem itemLabel="Ninguna Eligido" itemValue="F" />
+                                <f:selectItem itemLabel="Juan Juanson, 1232131-k" itemValue="F" />
+                                <f:selectItem itemLabel="Rodrigo Rodrigez 1600023-5" itemValue="A" />
+                                <f:selectItem itemLabel="Cazuela Rica 1903333-5" itemValue="B" />
+                            </p:selectOneMenu>
+
+                          
+                            <p:outputLabel value="Calle"/>
+                            <p:inputText />
+                            <p:outputLabel value="Comuna"/>
+                            <p:inputText />
+                            <p:outputLabel value="Nota"/>
+                            <p:inputText/>
+
+                            <p:outputLabel/>
+                            <p:commandButton value="Guardar" update="msgLMP" />
+
+                        </h:panelGrid>
+
+ </h:form>
+
+                        <p:separator />
+
+                        
+               </p:dialog>
+
+           
+                     <p:dialog header="Ingresar Compra" modal="true" draggable="false" resizable="false" widgetVar="dlgCompra" width="80%">
+                    <h:form id="formCompra" >
+                        <p:growl id="msgCompra" showDetail="true"/>
+                       
+                            <h:panelGrid id="datosCompra1" columns="1" cellpadding="5" >
+                                <h:panelGrid  columns="4" cellpadding="5">
+                                    <p:outputLabel for="provedoorCompra" value="Selecionar Provedor"/>
+                                    <p:selectOneMenu id="provedoorCompra">
+                                        <p:ajax listener="#{compraBean.onProveedorSelect()}" update="datosProveedor" />
+                             
+                                        <f:selectItem itemLabel="Cilindro" itemValue="#{compraBean.provedor}" />
+                                     <f:selectItems value="#{compraBean.provedors}" var="item" itemLabel="#{item.nombre}" itemValue="#{item}" />
+        
+                                               </p:selectOneMenu>
+                                    <p:outputLabel for="fechaCompra" value="Fecha: " />
+                                    <p:inputMask  id="fechaCompra" value="" mask="99/99/9999"/>
+                                    <p:outputLabel value="No. Guia" /><p:inputText style="border: black 2px solid;" value="" />
+                                </h:panelGrid>
+
+                                <h:panelGrid style="border: black 2px solid;" id="datosProveedor" columns="4" cellpadding="5">
+                                    <p:outputLabel value="Razon Social:" /><p:outputLabel style="border: black 2px solid;" value="#{compraBean.provedor.nombre}" />
+                                    <p:outputLabel value="Direccion:" /><p:outputLabel style="border: black 2px solid;" value="#{compraBean.provedor.direccion}" />
+                                    <p:outputLabel value="Giro" /><p:outputLabel style="border: black 2px solid;" value="#{compraBean.provedor.email}" />
+                                    
+                                </h:panelGrid>
+
+
+
+                                <h:panelGrid  id="cilindrosCompra" columns="4" cellpadding="5">
+                                    <p:outputLabel value="Detalle:" /><p:selectOneMenu id="eligeCilindrosCompra">
+                                        <f:selectItem itemLabel="2kg" itemValue="2" />
+                                        <f:selectItem itemLabel="5kg" itemValue="5" />
+                                        <f:selectItem itemLabel="11kg" itemValue="15" />
+
+                                        <f:selectItem itemLabel="30kg" itemValue="30" />
+                                        <f:selectItem itemLabel="45kg" itemValue="45" />
+                                        <f:selectItem itemLabel="15kg Fierro" itemValue="20" />
+                                        <f:selectItem itemLabel="15kg Aluminio" itemValue="20" />
+                                    </p:selectOneMenu> 
+                                    ////////////////TODO change to inputNumeber/////////
+                                    <p:outputLabel value="Cantidad:" /><p:inputText><f:validateDoubleRange minimum="0"/></p:inputText>
+
+                                    <p:outputLabel value="Total" /><p:outputLabel style="border: black 2px solid;" value="123.000" />
+                                    <p:commandButton value="Agregar" update=""/>
+                                </h:panelGrid>
+                                <h:panelGrid>   
+                                    <p:dataTable var="car" value="#{dtBasicView.cars}">
+                                        <p:column headerText="Cilindro">
+                                            <h:outputText value="1" />
+                                        </p:column>
+
+                                        <p:column headerText="Cantidad">
+                                            <h:outputText value="2" />
+                                        </p:column>
+
+                                        <p:column headerText="$ Unitario">
+                                            <h:outputText value="3" />
+                                        </p:column>
+
+                                        <p:column headerText="$ Total">
+                                            <h:outputText value="4" />
+                                        </p:column>
+                                    </p:dataTable>
+                                </h:panelGrid>
+
+                            </h:panelGrid>      
+                                
+                    </h:form>
+                </p:dialog>
+
+                     <p:dialog header="Rendire Chofer" modal="true" draggable="false" resizable="false" widgetVar="dlgRendir" width="80%">
+                    <p:growl id="msgLMR" showDetail="true" />
+                    <h:form>
+                        <h:panelGrid columns="3">
+                            <p:selectOneMenu id="ChoferRC" >
+                                <f:selectItem itemLabel="Ninguna Eligido" itemValue="F" />
+                                <f:selectItem itemLabel="Juan Juanson, 1232131-k" itemValue="F" />
+                                <f:selectItem itemLabel="Rodrigo Rodrigez 1600023-5" itemValue="A" />
+                                <f:selectItem itemLabel="Cazuela Rica 1903333-5" itemValue="B" />
+                            </p:selectOneMenu>
+                        <p:commandButton id="btnAP" value="Agregar Pago" ><p:resetInput target="agregarIngresosR" /></p:commandButton>
+                       
+                         <p:commandButton id="btnEP" value="Eliminar Pago" />
+                          <p:overlayPanel id="agregarIngresosR" for="btnAP" widgetVar="aIR" hideEffect="fade">
+                             <h:panelGrid>
+                                 <p:selectOneMenu id="MedioRC" >
+                                <f:selectItem itemLabel="Efectivo" itemValue="F" />
+                                <f:selectItem itemLabel="Cupon" itemValue="F" />
+                                <f:selectItem itemLabel="Credito" itemValue="A" />
+                                <f:selectItem itemLabel="Debito" itemValue="B" />
+                            </p:selectOneMenu>
+                                 <p:inputText placeholder="Monto $"><p:keyFilter regEx="/[\d\-]/"/><f:validateDoubleRange minimum="0"/></p:inputText>
+                                 <p:commandButton  value="Agregar">
+                                     <p:resetInput target="agregarIngresosR" />
+            </p:commandButton>
+                        
+                             </h:panelGrid>
+    </p:overlayPanel>
+                    </h:panelGrid>
+                    <h:panelGrid columns="2">
+                        <h:panelGrid columns="2" title="Cilindros">
+                            <p:outputLabel value="2KG" />         <p:inputText />
+                         <p:outputLabel value="5KG" />      <p:inputText />
+                         <p:outputLabel value="11KG" />       <p:inputText />
+                         <p:outputLabel value="15KG" />        <p:inputText />
+                         <p:outputLabel value="45KG" />         <p:inputText />
+                          <p:outputLabel value="15KG Fierro" />         <p:inputText />
+                           <p:outputLabel value="15KG Alu" />         <p:inputText />
+                                   
+                        </h:panelGrid>
+                        <h:panelGrid id="ingresosR" title="Ingresos">
+                            
+                                    <p:dataTable var="dtpagos" >
+                                         <f:facet name="header">
+           Pagos
+        </f:facet>
+    <p:column selectionMode="single" style="width:16px;text-align:center"/>
+                                        <p:column headerText="Medio de pago">
+                                            <h:outputText value="Debito" />
+                                        </p:column>
+
+                                        <p:column headerText="Cantidad">
+                                            <h:outputText value="100.000" />
+                                            <h:outputText value="50.000" />
+                                        </p:column>
+
+                                        
+                                    </p:dataTable>
+                             <p:outputLabel value="Total: _____"/>
+                        </h:panelGrid>
+                    </h:panelGrid>
+                    </h:form>
+            </p:dialog>
+  <p:dialog header="Logear Gasto" modal="true" draggable="false" resizable="false" widgetVar="dlgGasto" minHeight="40">
+                    <p:growl id="msgLMG" showDetail="true" />
+                    style="margin-bottom:10px; width:55%; margin:0px auto;"
+                    
+                        <h:panelGrid columns="2" cellpadding="5">
+                           <p:outputLabel value="Chofer" for="ChoferG" />
+                            <p:selectOneMenu id="ChoferG" >
+                                <f:selectItem itemLabel="Ninguna Eligido" itemValue="F" />
+                                <f:selectItem itemLabel="Juan Juanson, 1232131-k" itemValue="F" />
+                                <f:selectItem itemLabel="Rodrigo Rodrigez 1600023-5" itemValue="A" />
+                                <f:selectItem itemLabel="Cazuela Rica 1903333-5" itemValue="B" />
+                            </p:selectOneMenu>
+                           
+                           <p:outputLabel value="Reason" />
+                            <p:selectOneMenu id="reasonG" >
+                                <f:selectItem itemLabel="Ninguna Eligido" itemValue="F" />
+                                <f:selectItem itemLabel="Combustible" itemValue="F" />
+                                <f:selectItem itemLabel="Tarifa" itemValue="A" />
+                                <f:selectItem itemLabel="Saldo" itemValue="B" />
+                                 <f:selectItem itemLabel="Otra" itemValue="B" />
+                            </p:selectOneMenu>
+                           <p:outputLabel value="Reason" />
+                           <p:inputText />
+                           
+                           <p:outputLabel value="Cantidad $:" /><p:inputText> <p:keyFilter regEx="/[\d\-]/"/><f:validateDoubleRange minimum="0"/></p:inputText>
+                            <p:commandButton value="guardar" />
+                        </h:panelGrid>
+<p:separator />
+
+               </p:dialog>
+
+                 
+                   <p:dialog header="Cargar Vehiculo" modal="true" draggable="false" resizable="false" widgetVar="dlgCV" minHeight="40">
+                    <p:growl id="msgCV" showDetail="true" />
+                    style="margin-bottom:10px; width:55%; margin:0px auto;"
+                    
+                        <h:panelGrid columns="2" cellpadding="5">
+                      
+                            <p:outputLabel value="Camion"  />
+                            <p:selectOneMenu id="CamionCV" >
+                                <f:selectItem itemLabel="Ninguna Eligido" itemValue="F" />
+                                <f:selectItem itemLabel="Camion Uno" itemValue="F" />
+                                <f:selectItem itemLabel="Camion Dos" itemValue="A" />
+                              
+                            </p:selectOneMenu>
+TODO agregar keyfilter   <p:inputText id="text1">
+            <p:keyFilter regEx="/[\d\-]/ "/>
+        </p:inputText> 
+                            <h:panelGrid columns="2" title="Cilindros">
+                            <p:outputLabel value="2KG" />         <p:inputText />
+                         <p:outputLabel value="5KG" />      <p:inputText />
+                         <p:outputLabel value="11KG" />       <p:inputText />
+                         <p:outputLabel value="15KG" />        <p:inputText />
+                         <p:outputLabel value="45KG" />         <p:inputText />
+                          <p:outputLabel value="15KG Fierro" />         <p:inputText />
+                           <p:outputLabel value="15KG Alu" />         <p:inputText />
+
+                            
+
+
+                        </h:panelGrid>
+
+<p:dataTable  var="dtpagos" >
+    
+                                        <p:column headerText="Cilindro">
+                                            <h:outputText value="15KG" />
+                                             <h:outputText value="45KG" />
+                                        </p:column>
+
+                                        <p:column headerText="Cantidad">
+                                            <h:outputText value="10" />
+                                            <h:outputText value="5" />
+                                        </p:column>
+
+                                        
+                                    </p:dataTable>
+
+                        <p:separator />
+                        <p:commandButton value="Cargar"/>
+                        </h:panelGrid>
+               </p:dialog>
+                 
+                 
+                 <p:dialog header="Stock" modal="true" draggable="false" onHide="PF('danoPanelVar').hide();" resizable="false" widgetVar="dlgStock" width="80%">
+                    <h:form id="formStock" >
+                        <p:growl id="msgStock" showDetail="true"/>
+                       
+                           
+
+
+
+                              
+                        <h:panelGrid title="Sucursal">   
+                                    <p:dataTable  var="car" value="">
+                                        <p:column headerText="Stock">
+                                            <h:outputText value="1" />
+                                        </p:column>
+
+                                        <p:column headerText="de">
+                                            <h:outputText value="2" />
+                                        </p:column>
+
+                                        <p:column headerText="cilindros">
+                                            <h:outputText value="3" />
+                                        </p:column>
+
+                                        <p:column headerText="sucursal">
+                                            <h:outputText value="4" />
+                                        </p:column>
+                                    </p:dataTable>
+                                </h:panelGrid>
+
+                        <h:panelGrid title="Chofer 1">   
+                                    <p:dataTable  var="car" value="">
+                                        <p:column headerText="stock">
+                                            <h:outputText value="1" />
+                                        </p:column>
+
+                                        <p:column headerText="vehiculo">
+                                            <h:outputText value="2" />
+                                        </p:column>
+
+                                        <p:column headerText="numero">
+                                            <h:outputText value="3" />
+                                        </p:column>
+
+                                        <p:column headerText="uno">
+                                            <h:outputText value="4" />
+                                        </p:column>
+                                    </p:dataTable>
+                                </h:panelGrid>
+                        
+                        <h:panelGrid title="Chofer2">   
+                                    <p:dataTable  var="car" value="">
+                                        <p:column headerText="stock">
+                                            <h:outputText value="1" />
+                                        </p:column>
+
+                                        <p:column headerText="vehiculo">
+                                            <h:outputText value="2" />
+                                        </p:column>
+
+                                        <p:column headerText="numero">
+                                            <h:outputText value="3" />
+                                        </p:column>
+
+                                        <p:column headerText="dos">
+                                            <h:outputText value="4" />
+                                        </p:column>
+                                    </p:dataTable>
+                                </h:panelGrid>
+                        
+                        <p:commandButton id="danoBTN" value="Cilindro dañado"  />   
+                        <p:overlayPanel id="danoPanel" widgetVar="danoPanelVar" hideEvent="none" dismissable="false" for="danoBTN"  >
+                    <h:form id="formStockD" >
+                        <p:growl id="msgStockD" showDetail="true"/>
+                        
+                         <p:outputLabel value="Cilindro" /><p:selectOneMenu id="eligeCilindrosRoto">
+                                        <f:selectItem itemLabel="2kg" itemValue="2" />
+                                        <f:selectItem itemLabel="5kg" itemValue="5" />
+                                        <f:selectItem itemLabel="11kg" itemValue="15" />
+                                        <f:selectItem itemLabel="30kg" itemValue="30" />
+                                        <f:selectItem itemLabel="45kg" itemValue="45" />
+                                        <f:selectItem itemLabel="15kg Fierro" itemValue="20" />
+                                        <f:selectItem itemLabel="15kg Aluminio" itemValue="20" />
+                                    </p:selectOneMenu>
+                         <p:commandButton value="Guardar" onclick="PF('danoPanelVar').hide();"  />
+                          <p:commandButton value="Cancelar" onclick="PF('danoPanelVar').hide();"  />
+                    </h:form>
+                        </p:overlayPanel>
+                    </h:form>
+                </p:dialog>
+
+
+
+            </h:form>
+        
+
+
+
+
+
+
+
+
+
+
+    </h:body>
+</html>
+

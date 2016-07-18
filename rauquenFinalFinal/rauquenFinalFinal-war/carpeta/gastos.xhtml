@@ -1,0 +1,65 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    
+    <h:body>
+        
+        <h:form id ="gastoForm"  >
+           
+              <p:growl id="msgLMG" showDetail="true" />
+                  <p:selectOneMenu id="vendedorCompra" value="#{gastoBean.vendID}">
+                 
+
+                            <f:selectItem itemLabel="Vendedor" itemValue="" />
+                            <f:selectItems value="#{gastoBean.vendedors}" var="cv" itemLabel="#{cv.nombre} #{cv.telefono}" itemValue="#{cv.idvendedor}" />
+
+                        </p:selectOneMenu>
+                    
+            <p:panelGrid columns="2">
+              
+                
+                  <h:panelGrid title="Logear Gasto" columns="2" >
+                           
+                       
+            
+                           
+                        
+                           <p:outputLabel value="Reason"/>
+                           <p:inputText  value="#{gastoBean.reason}"></p:inputText>
+
+
+                           
+                           <p:outputLabel value="Cantidad $:" /><p:inputText value="#{gastoBean.multa}"> <p:keyFilter regEx="/[\d\-]/"/><f:validateDoubleRange minimum="0"/></p:inputText>
+                           <p:commandButton value="Guardar" actionListener="#{gastoBean.addGasto()}" />
+                        </h:panelGrid>
+
+                    <h:panelGrid title="Logear KM" columns="2" cellpadding="5">
+                           
+                         
+                        <p:outputLabel />
+  <p:outputLabel value="Kilometers a agregar"></p:outputLabel>
+                            <p:selectOneMenu id="KM" value="#{gastoBean.camionID}">
+                  
+                            <f:selectItem itemLabel="Camion No." itemValue="" />
+                            <f:selectItems value="#{gastoBean.camions}" var="cv" itemLabel="Camion #{cv.idcamion}: #{cv.km}KM" itemValue="#{cv.idcamion}" />
+
+                        </p:selectOneMenu>
+                        
+                           
+                        <p:inputText value="#{gastoBean.KM}"> <p:keyFilter regEx="/[\d\]/"/><f:validateDoubleRange minimum="0"/></p:inputText>
+  <p:outputLabel />
+                              <p:commandButton value="Guardar" actionListener="#{gastoBean.addKM()}" />
+                        </h:panelGrid>
+                  
+                  
+                  
+            </p:panelGrid> </h:form>
+    </h:body>
+</html>
+

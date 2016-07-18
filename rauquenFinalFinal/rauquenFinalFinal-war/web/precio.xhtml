@@ -1,0 +1,62 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+        <h:form style="width: 80%; margin: 0 auto;" id="formprecio">
+             <p:dataTable value="#{precioBean.precioClindros}"  var="p">
+                <p:column headerText="ID">
+                    <h:outputText value="#{p.idprecioCilindro}"/>
+                </p:column> 
+                  <p:column headerText="Precio">
+                      <h:outputText value="#{p.precio}"/>
+                </p:column> 
+                  
+               
+                 <p:column style="width:32px;text-align: center">
+             <p:commandButton update=":formprecio:panelPrecio" oncomplete="PF('dialogo').show()" icon="ui-icon-search" title="View">
+                 <f:setPropertyActionListener value="#{p}" target="#{precioBean.precio}" />
+            </p:commandButton>
+        </p:column>
+                 
+            </p:dataTable>  
+               <p:dialog header="Informacion Cilindro" widgetVar="dialogo" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+        <p:outputPanel id="panelPrecio" style="text-align:center;">
+            <p:panelGrid  columns="2" >
+              
+ 
+                <h:outputText value="Id:" />
+                <h:outputText value="#{precioBean.precio.idprecioCilindro}" />
+ 
+                <h:outputText value="Precio" />
+                <h:outputText value="#{precioBean.precio.precio}" />
+ 
+            </p:panelGrid>
+        </p:outputPanel>
+    </p:dialog>
+        </h:form>
+         <h:form  id="updatef" style="width: 80%; margin: 0 auto; padding-left: 30px;">
+            <p:panelGrid columns="2">   <p:selectOneMenu id="eligeCilindrosRoto" value="#{precioBean.cilinder}">
+                                        <f:selectItem itemLabel="2kg" itemValue="1" />
+                                        <f:selectItem itemLabel="5kg" itemValue="2" />
+                                        <f:selectItem itemLabel="11kg" itemValue="3" />
+                                        <f:selectItem itemLabel="30kg" itemValue="4" />
+                                        <f:selectItem itemLabel="45kg" itemValue="5" />
+                                        <f:selectItem itemLabel="15kg Fierro" itemValue="6" />
+                                        <f:selectItem itemLabel="15kg Aluminio" itemValue="7" />
+                                    </p:selectOneMenu>
+            <p:inputText value="#{precioBean.precioInt}"/>
+            
+            <p:outputLabel/>
+            <p:commandButton value="Guardar" update="updatef" actionListener="#{precioBean.actualizar()}"/>
+             </p:panelGrid>   </h:form>
+        
+       
+    </h:body>
+</html>
+

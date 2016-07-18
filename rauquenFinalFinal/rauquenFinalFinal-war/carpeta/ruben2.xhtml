@@ -1,0 +1,95 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body> 
+        <h:form id="compraForm">
+        <p:panel >
+                        
+                    <p:growl id="msgCompra" showDetail="true" />
+                    <p:panelGrid id="datosCompra1" columns="1"  >
+                                <p:panelGrid  columns="4" >
+                                    <p:outputLabel for="provedoorCompra" value="Selecionar Provedor"/>
+                                    <p:selectOneMenu id="provedoorCompra" value="#{compraBean.provID}">
+                                        <p:ajax listener="#{compraBean.onProveedorSelect()}"  update="compraForm" />
+                             
+                                        <f:selectItem itemLabel="Proveedor" itemValue="" />
+                                        <f:selectItems value="#{compraBean.proveedors}" var="c" itemLabel="#{c.nombre}" itemValue="#{c.idproveedor}" />
+        
+                                               </p:selectOneMenu>
+                                    <p:selectOneMenu id="usuCompra" value="#{compraBean.usuarioID}">
+                            <p:ajax listener="#{compraBean.onUsuSelect()}"  update="compraForm" />
+
+                            <f:selectItem itemLabel="Usuario" itemValue="" />
+                            <f:selectItems value="#{compraBean.usuarios}" var="c" itemLabel="#{c.nombre} #{c.idusuario}" itemValue="#{c.idusuario}" />
+
+                        </p:selectOneMenu>
+                                    <p:outputLabel  value="Fecha: " />
+                                    <p:calendar/>
+                                    <p:outputLabel value="No. Guia" /><p:inputText style="border: black 2px solid;" value="" />
+                                </p:panelGrid>
+
+                                <p:panelGrid style="border: black 2px solid;" id="datosProveedor" columns="4" >
+                                    <p:outputLabel value="Razon Social:" /><p:outputLabel style="border: black 2px solid;" value="#{compraBean.chosenProvedor.nombre}" />
+                                    <p:outputLabel value="Direccion:" /><p:outputLabel style="border: black 2px solid;" value="#{compraBean.chosenProvedor.direccion}" />
+                                    <p:outputLabel value="Giro" /><p:outputLabel style="border: black 2px solid;" value="#{compraBean.chosenProvedor.email}" />
+                                    
+                                </p:panelGrid>
+
+                                <p:panelGrid  id="cilindrosCompra" columns="4" >
+                                    <p:outputLabel value="Detalle:" /> 
+                                    <p:selectOneMenu id="prodCompra" value="#{compraBean.productoID}">
+                                        <p:ajax listener="#{compraBean.addProducto()}"  update="compraForm" />
+                                        <f:selectItems value="#{compraBean.productos}" var="cp" itemLabel="#{cp.tipo}" itemValue="#{cp.idproducto}" />
+        
+                                        
+                                    </p:selectOneMenu>
+                                 
+                                    <p:outputLabel value="Cantidad:" />
+                                   
+                                    <p:inputText id="cantidad" value="#{compraBean.cantidad}"> <p:keyFilter regEx="/[\d\-]/"/><f:validateDoubleRange minimum="0"/></p:inputText>
+
+                             
+                                    <p:commandButton value="Agregar" actionListener="#{compraBean.addProducto()}" update="compraForm"/>
+                                    <p:commandButton value="Cancelar" actionListener="#{compraBean.cancelCompra()}"  update="compraForm"/>
+                                    <p:commandButton value="Hacer Ingreso" actionListener="#{compraBean.doCompra()}"  update="compraForm"/>
+                 
+                                </p:panelGrid>
+                                <p:panelGrid>   
+                                    <p:dataTable var="a" value="#{compraBean.productoList}">
+                                        <p:column headerText="Cilindro">
+                                            <h:outputText value="#{a.tipo}" />
+                                        </p:column>
+
+                                                      <p:column headerText="Cantidad">
+                                <h:outputText value="#{compraBean.cantidades.get(rindex)}" />
+
+                            </p:column>
+
+                                        <p:column headerText="$ Unitario">
+                                <h:outputText value="$#{a.precio}" />
+                            </p:column>
+
+  <p:column headerText="Suma">
+                                <h:outputText value="$#{ventaBean.totals.get(rindex)}" />
+                            </p:column>
+                             <p:column headerText="Total Crudo">
+                                <h:outputText value="$#{ventaBean.total}">
+                                    <f:convertNumber pattern="###.###.###.###"  />
+                                </h:outputText></p:column>
+                                    </p:dataTable>
+                                </p:panelGrid>
+                           </p:panelGrid>
+        </p:panel>
+         </h:form>
+        
+        
+        
+    </h:body>
+</html>
+

@@ -1,0 +1,65 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head><!--                        <p:selectOneMenu id="usuCompra" value="#{ventaBean.usuId}">
+                            <p:ajax listener="#{ventaBean.onUsuSelect()}"  update="ventaForm" />
+
+                            <f:selectItem itemLabel="Usuario" itemValue="" />
+                            <f:selectItems value="#{ventaBean.usuarios}" var="c" itemLabel="#{c.nombre} #{c.idusuario}" itemValue="#{c.idusuario}" />
+
+                        </p:selectOneMenu>-->
+    <h:body>
+        <h:form id="form">
+             <p:dataTable value="#{cilindroBean.cilindros}" var="c">
+                <p:column headerText="Tipo">
+                    <h:outputText value="#{c.tipo}"/>
+                </p:column> 
+                 <p:column headerText="Stock">
+                     <h:outputText value="#{c.stockActual}"/>
+                </p:column> 
+                 <p:column headerText="Stock Minimo">
+                     <h:outputText value="#{c.stockMin}"/>
+                </p:column> 
+                 <p:column headerText="Stock Maximo">
+                     <h:outputText value="#{c.stockMax}"/>
+                </p:column> 
+                 
+                <p:column headerText="Precio">
+                        <h:outputText value="#{c.idprecioCilindro.precio}"/>
+                </p:column> 
+              
+                 <p:column style="width:32px;text-align: center">
+             <p:commandButton update=":form:panelClindro" oncomplete="PF('dialogo').show()" icon="ui-icon-search" title="View">
+                 <f:setPropertyActionListener value="#{c}" target="#{cilindroBean.cilindro}" />
+            </p:commandButton>
+        </p:column>
+                 
+            </p:dataTable>  
+               <p:dialog header="Informacion Cilindro" widgetVar="dialogo" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+        <p:outputPanel id="panelClindro" style="text-align:center;">
+            <p:panelGrid  columns="2" >
+              
+ 
+                <h:outputText value="Id:" />
+                <h:outputText value="#{cilindroBean.cilindro.idcilindro}" />
+ 
+                <h:outputText value="Tipo" />
+                <h:outputText value="#{cilindroBean.cilindro.tipo}" />
+ 
+                <h:outputText value="Stock" />
+                <h:outputText value="#{cilindroBean.cilindro.stockActual}" />
+ 
+                <h:outputText value="Precio" />
+                <p:inputText value="#{cilindroBean.cilindro.idprecioCilindro.precio}" />
+            </p:panelGrid>
+        </p:outputPanel>
+    </p:dialog>
+        </h:form>
+    </h:body>
+</html>
+

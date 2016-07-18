@@ -1,0 +1,166 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+
+
+
+
+
+
+
+
+        <p:panelGrid id="omiPanel" columns="2"  >
+
+
+            <h:form id="ventaForm">
+
+                <p:growl id="msgVenta" showDetail="true" />
+                <p:panelGrid id="datosVenta1" columns="1"  >
+                    <p:panelGrid  columns="4" >
+                        <p:outputLabel for="provedoorCompra" value="Selecionar Provedor"/>
+                        <p:selectOneMenu id="provedoorCompra" value="#{ventaBean.clienteID}">
+                            <p:ajax listener="#{ventaBean.onClienteSelect()}"  update="ventaForm" />
+
+                            <f:selectItem itemLabel="Cliente" itemValue="" />
+                            <f:selectItems value="#{ventaBean.clientes}" var="c" itemLabel="#{c.nombre} #{c.idcliente}" itemValue="#{c.idcliente}" />
+
+                        </p:selectOneMenu>
+
+                        <p:selectOneMenu id="usuCompra" value="#{ventaBean.usuId}">
+                            <p:ajax listener="#{ventaBean.onUsuSelect()}"  update="ventaForm" />
+
+                            <f:selectItem itemLabel="Usuario" itemValue="" />
+                            <f:selectItems value="#{ventaBean.usuarios}" var="c" itemLabel="#{c.nombre} #{c.idusuario}" itemValue="#{c.idusuario}" />
+
+                        </p:selectOneMenu>
+
+
+                        <p:selectOneMenu id="vendedorCompra" value="#{ventaBean.vendedorID}">
+                            <p:ajax listener="#{ventaBean.onVendedorSelect()}"  update="ventaForm" />
+
+                            <f:selectItem itemLabel="Vendedor" itemValue="#{ventaBean.vendedorID}" />
+                            <f:selectItems value="#{ventaBean.vendedors}" var="cv" itemLabel="#{cv.nombre} #{cv.telefono}" itemValue="#{cv.idvendedor}" />
+
+                        </p:selectOneMenu>
+
+                        <p:outputLabel value="Descuento: #{ventaBean.cliente.porcentajeDescuento}%" />
+                    </p:panelGrid>
+
+                    <p:panelGrid style="border: black 2px solid;" id="datosProveedor" columns="4" >
+                        <p:outputLabel value="Giro:" /><p:outputLabel style="border: black 2px solid;" value="#{ventaBean.cliente.giro}" />
+                        <p:outputLabel value="Direccion:" /><p:outputLabel style="border: black 2px solid;" value="#{ventaBean.cliente.direccion}" />
+                        <p:outputLabel value="Email:" /><p:outputLabel style="border: black 2px solid;" value="#{ventaBean.cliente.email}" />
+                        <p:outputLabel value="Telefono:" /><p:outputLabel style="border: black 2px solid;" value="#{ventaBean.cliente.telefono}" />
+                    </p:panelGrid>
+                    <p:panelGrid  id="cilindrosVenta" columns="4" >
+
+                        <p:outputLabel value="Detalle:" /> 
+                        <p:selectOneMenu id="cilinderCompra" value="#{ventaBean.cilindroID}">
+                            <f:selectItems value="#{ventaBean.cilindros}" var="vp" itemLabel="#{vp.tipo} #{vp.idprecioCilindro.precio}" itemValue="#{vp.idcilindro}" />
+                        </p:selectOneMenu>
+
+                        <p:outputLabel value="Cantidad:" />
+
+                        <p:inputText id="cantidad" value="#{ventaBean.cilindrocantidade}"> <p:keyFilter regEx="/[\d\-]/"/><f:validateDoubleRange minimum="1"/></p:inputText>
+
+
+                        <p:commandButton value="Agregar" actionListener="#{ventaBean.onCilindroAdd()}" update=":ventaForm, pagoForm"/>
+                        <p:commandButton value="Cancelar" actionListener="#{ventaBean.cancelVenta()}"/>
+                        <p:commandButton value="Hacer Venta" actionListener="#{ventaBean.doVenta()}"/>
+                    </p:panelGrid>
+
+                    <p:panelGrid>   
+                        <p:dataTable var="a" value="#{ventaBean.tempCilindros}" rowIndexVar="rindex">
+                            <p:column headerText="Cilindro">
+                                <h:outputText value="#{a.tipo}" />
+                            </p:column>
+
+                            <p:column headerText="Cantidad">
+                                <h:outputText value="#{ventaBean.cantidades.get(rindex)}" />
+
+                            </p:column>
+
+                            <p:column headerText="$ Unitario">
+                                <h:outputText value="$#{a.idprecioCilindro.precio}" />
+                            </p:column>
+
+                            <p:column headerText="Suma">
+                                <h:outputText value="$#{ventaBean.totals.get(rindex)}" />
+                            </p:column>
+
+                            <p:column headerText="Total Crudo">
+                                <h:outputText value="$#{ventaBean.total}">
+                                    <f:convertNumber pattern="###.###.###.###"  />
+                                </h:outputText></p:column>
+                            <p:column headerText="Total">
+                                <h:outputText value="$#{ventaBean.totalDes}">
+                                    <f:convertNumber pattern="###.###.###.###"  />
+                                </h:outputText></p:column>
+                        </p:dataTable>
+
+
+                    </p:panelGrid>
+
+                </p:panelGrid>
+
+
+
+
+            </h:form>
+
+            <h:form id="pagoForm">  
+
+
+
+                <p:panelGrid id="ventaPagos">
+                    <p:selectOneMenu id="PagoList" value="#{ventaBean.formaPagoInt}">
+                        <f:selectItems value="#{ventaBean.formaPago}" var="vp" itemLabel="#{vp.detalle}" itemValue="#{vp.idformaPago}" />
+
+
+                    </p:selectOneMenu>
+                    <p:outputLabel value="Cantidad:" />
+
+                    <p:inputText id="monto" value="#{ventaBean.pagoMonto}"><p:ajax /> <p:keyFilter regEx="/[\d\-]/"/></p:inputText>
+
+
+                    <p:commandButton value="Agregar" actionListener="#{ventaBean.onPagoAdd()}" update="pagoForm"/>
+<p:commandButton value="Set Resto" actionListener="#{ventaBean.setResto}" update="pagoForm"/>
+                </p:panelGrid>
+                <p:panelGrid>
+                    <p:dataTable id="pagoTable" var="ps" value="#{ventaBean.pagoFList}" rowIndexVar="pindex">
+                        <p:column headerText="Forma de Pago">
+                            <h:outputText value="#{ps.detalle}" />
+                        </p:column>
+
+                        <p:column headerText="Cantidad $">
+                            <h:outputText value="#{ventaBean.pagoMontos.get(pindex)}" />
+
+                        </p:column>
+
+
+
+                        <p:column headerText="Suma">
+                            <h:outputText value="$#{ventaBean.sumaPagos}" />
+                        </p:column>
+
+                        <p:column headerText="Falta">
+                            <h:outputText value="$#{ventaBean.totalDes - ventaBean.sumaPagos}">
+                                <f:convertNumber pattern="###.###.###.###"  />
+                            </h:outputText>
+                        </p:column>
+
+                    </p:dataTable>
+                </p:panelGrid>
+
+            </h:form>
+        </p:panelGrid>
+    </h:body>
+</html>
+
